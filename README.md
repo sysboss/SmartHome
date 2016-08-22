@@ -1,0 +1,2 @@
+# SmartHome
+Home automation project
