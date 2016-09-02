@@ -38,3 +38,6 @@ jspm_packages
 
 # MongoDB docker volume
 services/mongodb/db
+
+# temporary files
+.temp
