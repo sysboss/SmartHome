@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # check mongodb container state
-IS_RUNNING=$(docker inspect -f {{.State.Running}} $INSTANCE_NAME)
+IS_RUNNING=$(docker inspect -f {{.State.Running}} $INSTANCE_NAME 2>/dev/null)
 
 # check if already running
 if [[ $IS_RUNNING == "true" ]]; then
@@ -19,4 +19,3 @@ if [[ $IS_RUNNING == "true" ]]; then
 fi
 
 docker run -ti -d -p 27017:27017 -v $ROOT_DIR/services/mongodb/db:/data/db --name $INSTANCE_NAME mongo
-docker ps -f name=INSTANCE_NAME
