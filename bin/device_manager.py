@@ -12,7 +12,14 @@ import textwrap
 import pymongo
 from pprint import pprint
 
-with open('./config/database.json') as dbconf_file:
+# include logger
+sys.path.insert(0, '/opt/SmartHome/lib/python')
+from syslogger import init_logger, log_info, log_err
+
+# init logging
+log = init_logger('INFO')
+
+with open('/opt/SmartHome/config/database.json') as dbconf_file:
     dbconf = json.load(dbconf_file)
 
 # MongoDB config
@@ -24,6 +31,7 @@ def mongo_connect():
         return conn
     except pymongo.errors.ConnectionFailure, e:
        print "Could not connect to MongoDB: %s" % e
+       log_err(log, "Could not connect to MongoDB")
        sys.exit(2)
 
 def add_device(conn, device_data):
@@ -31,9 +39,9 @@ def add_device(conn, device_data):
 
     try:
         db.usb_devices.insert(device_data)
-        print "New device added!"
+        log_info(log, "New device added!", 1)
     except pymongo.errors.DuplicateKeyError:
-        print "This device is already exist!"
+        log_info(log, "This device is already exist!", 1)
         sys.exit(3)
 
 def remove_device(conn, device_data):
@@ -43,14 +51,14 @@ def remove_device(conn, device_data):
     try:
         result = db.usb_devices.delete_one( device_data )
     except pymongo.errors:
-        print "Failed to remove device"
+        log_err(log, "Failed to remove device", 1)
         sys.exit(2)
 
     if result.deleted_count < 1:
-        print "Device not found"
+        log_info(log, "Device not found", 1)
         sys.exit(3)
     else:
-        print "Device removed!"
+        log_info(log, "Device removed!", 1)
 
 def list_devices(conn, filter):
     db = conn.get_default_database()
