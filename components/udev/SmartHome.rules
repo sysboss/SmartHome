@@ -1,0 +1,2 @@
+ACTION=="add", SUBSYSTEM=="tty", RUN+="/usr/bin/python /opt/SmartHome/bin/device_manager.py -a 'add' -d '$name' -v '%E{ID_VENDOR}' -m '%E{ID_MODEL} %E{ID_MODEL_FROM_DATABASE}' -s '%E{ID_SERIAL}'"
+ACTION=="remove", SUBSYSTEM=="tty", RUN+="/usr/bin/python /opt/SmartHome/bin/device_manager.py -a 'remove' -d '$name' -v '%E{ID_VENDOR}' -m '%E{ID_MODEL} %E{ID_MODEL_FROM_DATABASE}' -s '%E{ID_SERIAL}'"
